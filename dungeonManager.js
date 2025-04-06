@@ -229,13 +229,10 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const generateButton = document.querySelector("#generateDungeon");
+let generateButton;
 
-generateButton.addEventListener("click", generateDungeon);
+let saveButton;
 
-const saveButton = document.querySelector("#saveDungeon");
-
-saveButton.addEventListener("click", saveDungeon);
 function generateDungeon() {
   const firstRoom = new Room(
     {
@@ -265,4 +262,14 @@ function showDungeonsList() {
   console.log(777);
 }
 
-showDungeonsList();
+document.addEventListener("DOMContentLoaded", function () {
+  generateButton = document.querySelector("#generateDungeon");
+
+  saveButton = document.querySelector("#saveDungeon");
+
+  generateButton.addEventListener("click", generateDungeon);
+
+  saveButton.addEventListener("click", saveDungeon);
+
+  showDungeonsList();
+});

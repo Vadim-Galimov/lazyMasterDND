@@ -1,103 +1,117 @@
-// Пример данных (в реальном проекте можно загружать из JSON файла)
-const monsters = [
-  {
-    name: "Гоблин",
-    type: "Гуманоид (гоблиноид)",
-    size: "Маленький",
-    alignment: "нейтрально-злой",
-    armor_class: "15 (кожаный доспех, щит)",
-    hit_points: "7 (2к6)",
-    speed: "30 футов",
-    strength: 8,
-    dexterity: 14,
-    constitution: 10,
-    intelligence: 10,
-    wisdom: 8,
-    charisma: 8,
-    skills: "Скрытность +6",
-    senses: "Темное зрение 60 футов, пассивное Восприятие 9",
-    languages: "Общий, Гоблинский",
-    challenge_rating: "1/4",
-    abilities: [
-      "Военная тактика: Когда гоблин атакует существо, которое находится в пределах 5 футов от его союзника, который не недееспособен, гоблин получает преимущество на броски атаки.",
-      "Проворный побег: Гоблин может совершить действие Отступить или Спрятаться в качестве бонусного действия в каждый свой ход.",
-    ],
-    actions: [
-      "Скимитар: +4 к попаданию, досягаемость 5 футов, одна цель. Урон: 5 (1к6 + 2) режущего урона.",
-      "Короткий лук: +4 к попаданию, дальность 80/320 футов, одна цель. Урон: 5 (1к6 + 2) колющего урона.",
-    ],
-  },
-  // Добавьте других существ
-];
+class Creature {
+  constructor({
+    name = "Безымянный",
+    hp = "1 (1d4)",
+    ac = "10",
+    speed = "30 фт.",
+    abilities = {
+      str: 10,
+      dex: 10,
+      con: 10,
+      int: 10,
+      wis: 10,
+      cha: 10,
+    },
+    actions = [],
+    type = "гуманоид",
+    challenge_rating = "1/8",
+    size = "средний",
+    alignment = "нейтральный",
+    senses = "",
+    languages = "Общий",
+    special_abilities = [],
+  }) {
+    this.name = name;
+    this.hp = hp;
+    this.ac = ac;
+    this.speed = speed;
+    this.abilities = abilities;
+    this.actions = actions;
+    this.type = type;
+    this.challenge_rating = challenge_rating;
+    this.size = size;
+    this.alignment = alignment;
+    this.senses = senses;
+    this.languages = languages;
+    this.special_abilities = special_abilities;
+  }
 
-function renderMonsters(monstersToRender) {
-  const container = document.getElementById("monsters-container");
-  container.innerHTML = "";
+  // Метод для генерации модификатора характеристики
+  getAbilityModifier(ability) {
+    const score = this.abilities[ability];
+    return Math.floor((score - 10) / 2);
+  }
 
-  monstersToRender.forEach((monster) => {
-    const card = document.createElement("div");
-    card.className = "monster-card";
+  // Метод для форматированного вывода модификатора (со знаком +)
+  getFormattedModifier(ability) {
+    const modifier = this.getAbilityModifier(ability);
+    return modifier >= 0 ? `+${modifier}` : modifier;
+  }
 
-    card.innerHTML = `
-                    <h2 class="monster-name">${monster.name}</h2>
-                    <p><strong>Тип:</strong> ${
-                      monster.type
-                    } | <strong>Размер:</strong> ${
-      monster.size
-    } | <strong>Мировоззрение:</strong> ${monster.alignment}</p>
-                    <p><strong>Класс доспеха:</strong> ${
-                      monster.armor_class
-                    } | <strong>Хиты:</strong> ${
-      monster.hit_points
-    } | <strong>Скорость:</strong> ${monster.speed}</p>
-                    
-                    <div class="monster-stats">
-                        <div class="stat-item"><span class="stat-label">СИЛ</span> ${
-                          monster.strength
-                        } (${Math.floor((monster.strength - 10) / 2)})</div>
-                        <div class="stat-item"><span class="stat-label">ЛОВ</span> ${
-                          monster.dexterity
-                        } (${Math.floor((monster.dexterity - 10) / 2)})</div>
-                        <div class="stat-item"><span class="stat-label">ТЕЛ</span> ${
-                          monster.constitution
-                        } (${Math.floor((monster.constitution - 10) / 2)})</div>
-                        <div class="stat-item"><span class="stat-label">ИНТ</span> ${
-                          monster.intelligence
-                        } (${Math.floor((monster.intelligence - 10) / 2)})</div>
-                        <div class="stat-item"><span class="stat-label">МУД</span> ${
-                          monster.wisdom
-                        } (${Math.floor((monster.wisdom - 10) / 2)})</div>
-                        <div class="stat-item"><span class="stat-label">ХАР</span> ${
-                          monster.charisma
-                        } (${Math.floor((monster.charisma - 10) / 2)})</div>
-                    </div>
-                    
-                    <p><strong>Навыки:</strong> ${monster.skills || "-"}</p>
-                    <p><strong>Чувства:</strong> ${monster.senses}</p>
-                    <p><strong>Языки:</strong> ${monster.languages}</p>
-                    <p><strong>Уровень опасности:</strong> ${
-                      monster.challenge_rating
-                    }</p>
-                    
-                    ${
-                      monster.abilities
-                        ? `<h3>Особые способности</h3><ul>${monster.abilities
-                            .map((a) => `<li>${a}</li>`)
-                            .join("")}</ul>`
-                        : ""
-                    }
-                    
-                    ${
-                      monster.actions
-                        ? `<h3>Действия</h3><ul>${monster.actions
-                            .map((a) => `<li>${a}</li>`)
-                            .join("")}</ul>`
-                        : ""
-                    }
-                `;
+  // Метод для создания карточки существа
+  createCard() {
+    const template = document.getElementById("creature-card-template");
+    const card = template.content.cloneNode(true);
 
-    container.appendChild(card);
-  });
+    // Заполняем основные данные
+    card.querySelector(".creature-name").textContent = this.name;
+    card.querySelector(".creature-hp").textContent = `HP: ${this.hp}`;
+    card.querySelector(".creature-ac").textContent = `AC: ${this.ac}`;
+    card.querySelector(".creature-speed").textContent = `Speed: ${this.speed}`;
+    card.querySelector(
+      ".creature-type"
+    ).textContent = `${this.size} ${this.type}, ${this.alignment}`;
+    card.querySelector(
+      ".creature-cr"
+    ).textContent = `CR: ${this.challenge_rating}`;
+
+    // Заполняем характеристики и модификаторы
+    card.querySelector(".creature-str").textContent = `${
+      this.abilities.str
+    } (${this.getFormattedModifier("str")})`;
+    card.querySelector(".creature-dex").textContent = `${
+      this.abilities.dex
+    } (${this.getFormattedModifier("dex")})`;
+    card.querySelector(".creature-con").textContent = `${
+      this.abilities.con
+    } (${this.getFormattedModifier("con")})`;
+    card.querySelector(".creature-int").textContent = `${
+      this.abilities.int
+    } (${this.getFormattedModifier("int")})`;
+    card.querySelector(".creature-wis").textContent = `${
+      this.abilities.wis
+    } (${this.getFormattedModifier("wis")})`;
+    card.querySelector(".creature-cha").textContent = `${
+      this.abilities.cha
+    } (${this.getFormattedModifier("cha")})`;
+
+    // Добавляем особые способности, если они есть
+    const abilitiesList = card.querySelector(".abilities-list");
+    if (this.special_abilities.length > 0) {
+      this.special_abilities.forEach((ability) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${ability.name}:</strong> ${ability.desc}`;
+        abilitiesList.appendChild(li);
+      });
+    } else {
+      abilitiesList.parentElement.style.display = "none";
+    }
+
+    // Добавляем действия
+    const actionsList = card.querySelector(".actions-list");
+    if (this.actions.length > 0) {
+      this.actions.forEach((action) => {
+        const li = document.createElement("li");
+        li.textContent = action;
+        actionsList.appendChild(li);
+      });
+    } else {
+      actionsList.parentElement.style.display = "none";
+    }
+
+    // Добавляем карточку в контейнер
+    document.getElementById("creatures-container").appendChild(card);
+  }
 }
 
 function filterMonsters() {
@@ -125,6 +139,198 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("cr-filter")
     .addEventListener("change", filterMonsters);
-  // Первоначальная загрузка
-  renderMonsters(monsters);
+
+  // Создание гоблина с помощью класса
+  const goblin = new Creature({
+    name: "Гоблин",
+    hp: "7 (2d6)",
+    ac: "15 (кожаный доспех)",
+    speed: "30 фт.",
+    abilities: {
+      str: 8,
+      dex: 14,
+      con: 10,
+      int: 10,
+      wis: 8,
+      cha: 8,
+    },
+    actions: [
+      "Атака: +4 к попаданию, 1d6+2 колющего урона",
+      "Лук: +4 к попаданию, 1d6+2 колющего урона, дистанция 80/320 фт.",
+    ],
+    type: "гуманоид (гоблиноид)",
+    challenge_rating: "1/4",
+    senses: "тёмное зрение 60 фт.",
+    languages: "обычный, гоблинский",
+  });
+
+  // Создание волка
+  const wolf = new Creature({
+    name: "Волк",
+    hp: "11 (2d8+2)",
+    ac: "13 (естественная броня)",
+    speed: "40 фт.",
+    abilities: {
+      str: 12,
+      dex: 15,
+      con: 12,
+      int: 3,
+      wis: 12,
+      cha: 6,
+    },
+    type: "зверь",
+    size: "средний",
+    alignment: "неистовый",
+    senses: "острое обоняние, пассивное восприятие 13",
+    special_abilities: [
+      {
+        name: "Тактика стаи",
+        desc: "Волк имеет преимущество на броски атаки против существа, если в пределах 5 футов от него находится хотя бы один союзник волка, не недееспособный.",
+      },
+      {
+        name: "Опрокидывание",
+        desc: "Если волк попадает атакой по существу, то цель должна преуспеть в спасброске Силы КС 11 или быть опрокинутой.",
+      },
+    ],
+    actions: [
+      "Укус: +4 к попаданию, 2d4+2 колющего урона. Если цель опрокинута, волк может совершить дополнительную атаку укусом как бонусное действие.",
+    ],
+  });
+
+  const guard = new Creature({
+    name: "Стражник",
+    hp: "11",
+    ac: "16 (кольчужная рубаха, щит)",
+    speed: "30 фт.",
+    abilities: {
+      str: 13,
+      dex: 12,
+      con: 12,
+      int: 10,
+      wis: 11,
+      cha: 10,
+    },
+    actions: ["Атака: +3 к попаданию, 1d6+1 колющего урона"],
+    type: "гуманоид (Человек)",
+    challenge_rating: "1/4",
+    senses: "",
+    languages: "Общий, гоблинский",
+  });
+
+  const oldVampire = new Creature({
+    name: "Старый вампир",
+    hp: "48",
+    ac: "12",
+    speed: "30 фт.",
+    abilities: {
+      str: 12,
+      dex: 14,
+      con: 10,
+      int: 10,
+      wis: 11,
+      cha: 12,
+    },
+    actions: [
+      "Укус: +4 к попаданию, 1d4+2 некротического урона, хилится за нанесённый урон",
+    ],
+    type: "гуманоид (Нежить)",
+    challenge_rating: "1/4",
+    senses: "",
+    languages: "Общий",
+  });
+
+  const shadow = new Creature({
+    name: "Тень",
+    hp: "6",
+    ac: "12",
+    speed: "30 фт.",
+    abilities: {
+      str: 6,
+      dex: 14,
+      con: 10,
+      int: 6,
+      wis: 10,
+      cha: 8,
+    },
+    actions: [
+      "Вытягивание силы: +4 к попаданию, 1d4+2 некротического урона. Значение силы жертвы уменьшается на 1к4, если сила будет 0 - смерть. за убийство хилится за похищенную силы последней атаки",
+    ],
+    type: "гуманоид (Нежить)",
+    challenge_rating: "1/4",
+    senses: "",
+    languages: "Общий",
+  });
+
+  const rat = new Creature({
+    name: "Крыса",
+    hp: "1",
+    ac: "10",
+    speed: "30 фт.",
+    abilities: {
+      str: 2,
+      dex: 11,
+      con: 9,
+      int: 2,
+      wis: 10,
+      cha: 4,
+    },
+    actions: ["Укус: +0 к попаданию,  1 колющего урона"],
+    type: "гуманоид (Нежить)",
+    challenge_rating: "1/4",
+    senses: "",
+    languages: "Общий",
+  });
+
+  const werewolf = new Creature({
+    name: "Оборотень",
+    hp: "28",
+    ac: "12",
+    speed: "30 фт.",
+    abilities: {
+      str: 15,
+      dex: 13,
+      con: 14,
+      int: 10,
+      wis: 11,
+      cha: 10,
+    },
+    actions: [
+      "Мультиатака. Вервольф совершает две атаки одну Укусом и одну Когтями (в гибридном облике).",
+      "Укус: +4 к попаданию, 1к8 + 2 колющего урона. Если цель — гуманоид, она должна преуспеть в спасброске Телосложения со Сл 12, иначе станет проклятой ликантропией вервольфа",
+      "Когти  +4 к попаданию, Попадание: 2к4 + 2 рубящего урона.",
+    ],
+    type: "гуманоид (Нежить)",
+    challenge_rating: "1/4",
+    senses: "",
+    languages: "Общий",
+  });
+
+  const bigRat = new Creature({
+    name: "КБольшая крыса",
+    hp: "20",
+    ac: "12",
+    speed: "30 фт.",
+    abilities: {
+      str: 7,
+      dex: 15,
+      con: 11,
+      int: 2,
+      wis: 10,
+      cha: 4,
+    },
+    actions: ["Укус: +4 к попаданию,  1к4 + 2 колющего урона"],
+    type: "гуманоид (Нежить)",
+    challenge_rating: "1/4",
+    senses: "",
+    languages: "Общий",
+  });
+  // Создание карточек
+  guard.createCard();
+  oldVampire.createCard();
+  shadow.createCard();
+  rat.createCard();
+  bigRat.createCard();
+  werewolf.createCard();
+  goblin.createCard();
+  wolf.createCard();
 });

@@ -42,9 +42,46 @@
         <!-- Добавьте другие уровни сложности -->
       </select>
     </div>
-
-    <div id="monsters-container">
-      <!-- Монстры будут загружены здесь -->
-    </div>
   </body>
+  <template id="creature-card-template">
+    <div class="creature-card">
+      <div class="creature-header">
+        <h2 class="creature-name"></h2>
+        <div class="creature-meta">
+          <span class="creature-type"></span>
+          <span class="creature-cr"></span>
+        </div>
+      </div>
+
+      <div class="creature-stats">
+        <div><span class="creature-hp"></span></div>
+        <div><span class="creature-ac"></span></div>
+        <div><span class="creature-speed"></span></div>
+        <div><span class="creature-senses"></span></div>
+        <div><span class="creature-languages"></span></div>
+      </div>
+
+      <div class="creature-abilities">
+        <div><strong>STR</strong> <span class="creature-str"></span></div>
+        <div><strong>DEX</strong> <span class="creature-dex"></span></div>
+        <div><strong>CON</strong> <span class="creature-con"></span></div>
+        <div><strong>INT</strong> <span class="creature-int"></span></div>
+        <div><strong>WIS</strong> <span class="creature-wis"></span></div>
+        <div><strong>CHA</strong> <span class="creature-cha"></span></div>
+      </div>
+
+      <div class="creature-special-abilities">
+        <h3>Special Abilities</h3>
+        <ul class="abilities-list"></ul>
+      </div>
+
+      <div class="creature-actions">
+        <h3>Actions</h3>
+        <ul class="actions-list"></ul>
+      </div>
+    </div>
+  </template>
+
+  <!-- Контейнер, куда будут добавляться карточки -->
+  <div id="creatures-container"></div>
 </html>

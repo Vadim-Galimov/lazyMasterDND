@@ -15,29 +15,6 @@ h1 {
   padding-bottom: 10px;
 }
 
-.monster-card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.monster-name {
-  color: #8b4513;
-  font-size: 1.5em;
-  margin-top: 0;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-}
-
-.monster-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
-}
-
 .stat-item {
   margin-bottom: 5px;
 }
@@ -66,8 +43,65 @@ h1 {
   flex-wrap: wrap;
 }
 
+.filters select {
+  flex: 1;
+  min-width: 200px;
+}
+
 select {
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #ddd;
+}
+
+.creature-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px;
+  background: #f9f9f9;
+  max-width: 300px;
+}
+
+.creature-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.creature-abilities {
+  margin-bottom: 10px;
+}
+
+.actions-list {
+  margin-left: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #8b4513;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #a0522d;
+}
+
+canvas {
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+.creature-name {
+  color: #8b4513;
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
 }

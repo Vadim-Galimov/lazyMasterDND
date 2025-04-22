@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   const bigRat = new Creature({
-    name: "КБольшая крыса",
+    name: "Большая крыса",
     hp: "20",
     ac: "12",
     speed: "30 фт.",
@@ -324,6 +324,71 @@ document.addEventListener("DOMContentLoaded", function () {
     senses: "",
     languages: "Общий",
   });
+  const rustyBarbarian = new Creature({
+    name: "Варвар Ржавый",
+    hp: "67",
+    ac: "14 (шкурный доспех)",
+    speed: "30 фт.",
+    abilities: {
+      str: 16,
+      dex: 15,
+      con: 17,
+      int: 9,
+      wis: 11,
+      cha: 9,
+    },
+    actions: [
+      "Мультиатака: Рукопашная атака кулаками +5 к попаданию, 1d4+3 дробящего урона",
+    ],
+    type: "гуманоид (человек)",
+    challenge_rating: "2",
+    size: "средний",
+    alignment: "хаотичный нейтральный",
+    senses: "",
+    languages: "Общий",
+    special_abilities: [
+      {
+        name: "Безрассудство",
+        desc: "В начале своего хода берсерк может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала его следующего хода все броски атаки по нему тоже будут совершаться с преимуществом.",
+      },
+      {
+        name: "Навыки",
+        desc: "Запугивание +7",
+      },
+    ],
+  });
+
+  const goblinBasher = new Creature({
+    name: "Плут гоблин Башка",
+    hp: "31",
+    ac: "16 (кольчужная рубаха, щит)",
+    speed: "30 фт.",
+    abilities: {
+      str: 10,
+      dex: 16,
+      con: 10,
+      int: 12,
+      wis: 12,
+      cha: 10,
+    },
+    actions: [
+      "Мультиатака: Совершает две атаки кинжалом",
+      "Скимитар: Рукопашная атака +4 к попаданию, 1d4+3 колющего урона",
+    ],
+    type: "гуманоид (гоблиноид)",
+    challenge_rating: "2",
+    size: "малый",
+    alignment: "нейтрально-злой",
+    senses: "тёмное зрение 60 фт.",
+    languages: "Общий, гоблинский",
+    special_abilities: [
+      {
+        name: "Навыки",
+        desc: "Скрытность +7, Ловкость рук +7, Обман +3",
+      },
+    ],
+  });
+
   // Создание карточек
   guard.createCard();
   oldVampire.createCard();
@@ -333,4 +398,6 @@ document.addEventListener("DOMContentLoaded", function () {
   werewolf.createCard();
   goblin.createCard();
   wolf.createCard();
+  rustyBarbarian.createCard();
+  goblinBasher.createCard();
 });
